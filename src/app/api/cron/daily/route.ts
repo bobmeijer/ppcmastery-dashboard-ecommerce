@@ -21,8 +21,8 @@ const HANDLERS: Record<DailyHandler, (request: Request) => Promise<Response>> = 
 
 // GET /api/cron/daily
 // The one scheduled job. It runs every enabled sync in turn, so a single daily schedule is
-// enough. Steps that do not fit in the time limit are listed under "skipped" and are picked
-// up by the next run, because each step re-reads a window of recent days.
+// enough. Steps that do not fit in the time limit are listed under "skipped". The order is
+// fixed, so the same steps can be skipped again the next day: see docs/recipes/faster-sync.md.
 export async function GET(request: Request) {
   if (!isCronRequest(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 

@@ -10,7 +10,7 @@ Built by Bob Meijer, for The PPC Hub by PPC Mastery.
 
 - **Overview and trends:** spend, revenue, ROAS, CPA and conversion lag, with period comparison and targets.
 - **Categories and campaigns:** performance by your own campaign naming scheme.
-- **Products and buckets:** product performance, product types, and heroes, sidekicks, villains and zombies.
+- **Products and buckets:** product performance, product types, and heroes, sidekicks, villains and zombies. The buckets page expects `H`, `S`, `V` or `Z` in custom label 2 of your feed, so have your LLM change that if you label differently.
 - **Countries and devices:** where and on what your budget works.
 - **Status page and roles:** see when data last synced, and give clients a read-only login.
 
@@ -93,19 +93,23 @@ The same goes for the metrics, the pages and the layout. Delete what you don't n
 
 These are the steps for running this project with the tools I chose. If you've swapped a tool, have your LLM update the steps that change.
 
-Plan for about an hour, plus any waiting time for Google to approve your developer token.
+Plan for about an hour, plus any waiting time for Google to approve your API access.
 
 ### What this version uses
 
-- A [Supabase](https://supabase.com) project. This holds your data.
-- A [Vercel](https://vercel.com) account. This runs the dashboard and the daily sync.
-- A Google Ads account or manager account (MCC) you have admin access to.
-- A Google Cloud project, used for the OAuth login.
-- A Google Ads developer token approved for production accounts. A test-only token can't read real accounts.
+- A [Supabase](https://supabase.com) project. This holds your data. The free plan has a 500 MB limit, and my version with two ecommerce accounts and all modules is past that, so expect to need a paid plan once you load product history.
+- A [Vercel](https://vercel.com) account. This runs the dashboard and the daily sync. Vercel's free Hobby plan is for non-commercial personal use only, so client work needs a paid Pro plan.
+- A Google Ads account or manager account (MCC) your Google login can access.
+- A Google Cloud project with the Google Ads API enabled and at least Explorer access. Test access can't read real accounts. You don't need a developer token: Google retired those on 9 September 2026.
 
 ### 1. Get the code
 
-Fork this repo to your own GitHub account as a **private** repo, then clone it and run `npm install`.
+GitHub doesn't allow a private fork of a public repo. Create a new, empty **private** repo on your own account, then push your clone to it:
+
+```bash
+git remote set-url origin https://github.com/YOUR-NAME/YOUR-PRIVATE-REPO.git
+git push -u origin main
+```
 
 ### 2. Tell it about your business
 
@@ -124,17 +128,9 @@ supabase db push
 
 All tables have row level security on and no policies. Only the server can read them, using the service role key. Don't add a permissive policy.
 
-### 4. Connect Google Ads
+### 4. Set your environment variables
 
-1. In Google Cloud, enable the Google Ads API.
-2. Create an OAuth client of the type "Desktop app", and note the client ID and secret.
-3. In Google Ads, open **Admin > API Center** in your manager account and copy your developer token.
-4. Run `npm run google:auth` and sign in with a user who can access your accounts. It stores the refresh token for you and lists the accounts it can reach.
-5. If you use a manager account, note its 10-digit ID without dashes.
-
-### 5. Set your environment variables
-
-Copy `.env.example` to `.env.local` and fill it in.
+Copy `.env.example` to `.env.local` and fill it in. The Google values come from step 5.
 
 | Variable | Needed for | Where it comes from |
 |---|---|---|
@@ -144,11 +140,10 @@ Copy `.env.example` to `.env.local` and fill it in.
 | `NEXTAUTH_URL` | Login | The address of your dashboard |
 | `CRON_SECRET` | Sync | Run `openssl rand -base64 32` |
 | `DASHBOARD_BASE_URL` | Backfill script | The address of your dashboard |
-| `GOOGLE_ADS_CLIENT_ID` | Sync | Step 4 |
-| `GOOGLE_ADS_CLIENT_SECRET` | Sync | Step 4 |
-| `GOOGLE_ADS_DEVELOPER_TOKEN` | Sync | Step 4 |
-| `GOOGLE_ADS_REFRESH_TOKEN` | Sync | Step 4 |
-| `GOOGLE_ADS_LOGIN_CUSTOMER_ID` | Manager accounts | Step 4 |
+| `GOOGLE_ADS_CLIENT_ID` | Sync | Step 5 |
+| `GOOGLE_ADS_CLIENT_SECRET` | Sync | Step 5 |
+| `GOOGLE_ADS_REFRESH_TOKEN` | Sync | Step 5 |
+| `GOOGLE_ADS_LOGIN_CUSTOMER_ID` | Manager accounts | Step 5 |
 | `MERCHANT_REFRESH_TOKEN` | Feed status | Needs its own login with the content scope. `npm run google:auth` only requests Google Ads access |
 | `MSADS_CLIENT_ID`, `MSADS_CLIENT_SECRET`, `MSADS_DEVELOPER_TOKEN`, `MSADS_REFRESH_TOKEN` | Microsoft Ads | Microsoft Advertising API. Run `npm run msads:auth` for the token |
 | `GOOGLE_SHEETS_SERVICE_ACCOUNT_B64` | Auction insights | A Google service account key, base64 encoded |
@@ -157,21 +152,24 @@ Copy `.env.example` to `.env.local` and fill it in.
 
 Never commit `.env.local`. Never give the service role key a `NEXT_PUBLIC_` name, because that would send it to the browser.
 
-### 6. Check your setup
+### 5. Connect Google Ads
 
-```bash
-npm run doctor
-```
+1. In Google Cloud, create a project or reuse one, and enable the Google Ads API. If you used the API before 9 September 2026, reuse the project that made those calls, because your access level moved to it.
+2. Open the **Google Ads API Overview** page for that project. If it says Test, apply for **Explorer** access there. Review is automated in most cases, and it allows 2,880 operations a day on real accounts. Google may reject projects on a Cloud free trial, so upgrade the project to a paid tier if that happens.
+3. Under **Google Auth Platform > Audience**, choose Internal if your Workspace allows it, or External and **Publish app**. If it stays in Testing, your login expires after 7 days and the sync stops.
+4. Create an OAuth client of the type "Desktop app", and add its ID and secret to `.env.local`.
+5. Run `npm run google:auth` and sign in with a user who can access your accounts. Google may warn that the app isn't verified. It's your own app, so continue under Advanced. The script stores the refresh token and lists the accounts it can reach.
+6. If you use a manager account, set `GOOGLE_ADS_LOGIN_CUSTOMER_ID` to its 10-digit ID without dashes.
 
-This tests each connection and tells you exactly what to fix.
-
-### 7. Add your accounts and create your login
+### 6. Add your accounts and create your login
 
 Add each account from your config:
 
 ```bash
-npm run accounts:add -- --label shop --name "My shop" --id XXX-XXX-XXXX
+npm run accounts:add -- --label shop --name "My shop" --id XXX-XXX-XXXX --currency EUR --lag 7
 ```
+
+`--lag` is how many days conversions usually take to come in.
 
 Then create your login:
 
@@ -181,19 +179,35 @@ npm run users:add -- you@example.com admin "Your name"
 
 You'll be asked for a password. Use the role `client` for read-only logins.
 
+### 7. Check your setup
+
+```bash
+npm run doctor
+```
+
+This tests each connection and tells you exactly what to fix.
+
 ### 8. Deploy
 
 Import your private repo in Vercel, add the same environment variables under the production environment, and set `NEXTAUTH_URL` to your real address. Vercel builds it on every push to `main`.
 
-The sync runs once a day by default. Faster schedules may need a paid Vercel plan, see `docs/recipes/faster-sync.md`.
+The sync runs once a day. To test it, open **Schedules** in your Vercel project and click **Run Schedule**. Vercel Schedules are still in beta. To run it more often, see `docs/recipes/faster-sync.md`.
 
 ### 9. Load your history
+
+Set `DASHBOARD_BASE_URL` in `.env.local` to your deployed address, then run:
 
 ```bash
 npm run backfill -- --from 2024-01-01
 ```
 
-This loads month by month, newest first. If it stops, rerun it with `--to` set to the last month that didn't finish. Then open the dashboard and look at the Status page.
+This loads campaigns, conversions, countries and devices month by month, newest first. If it stops, rerun it with `--to` set to the last month that didn't finish. Product history is a separate run, in 7-day pieces because it's slower:
+
+```bash
+npm run backfill -- --from 2026-01-01 --datasets product --days 7
+```
+
+Then open the dashboard and look at the Status page.
 
 ## Security
 
@@ -208,7 +222,9 @@ This loads month by month, newest first. If it stops, rerun it with `--to` set t
 | Problem | What to try |
 |---|---|
 | Something isn't connecting | Run `npm run doctor` first |
-| Google says the developer token isn't approved | Your token is test-only. Apply for access in the API Center |
+| `CLOUD_PROJECT_NOT_APPROVED_FOR_PRODUCTION` | Your Google Cloud project only has Test access. Apply for Explorer on the Google Ads API Overview page |
+| `invalid_grant`, or the sync stops after a week | The OAuth app is still in Testing. Publish it, run `npm run google:auth` again, and update `GOOGLE_ADS_REFRESH_TOKEN` in Vercel |
+| Google says the API version is deprecated | Update the `google-ads-api` package. This version, v26, runs until about November 2027 |
 | Google Ads permission error | Check that the OAuth user can access the account, and that the manager account ID is right |
 | Numbers are missing after deploying | Run the backfill in step 9, then check the Status page |
 | Categories all show as "Other" | Your campaign names don't match the parser. See the name parser recipe |

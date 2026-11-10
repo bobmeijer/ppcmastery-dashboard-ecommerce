@@ -31,9 +31,8 @@ function requireVars(names, fix) {
 
 function explainGoogle(error) {
   const text = JSON.stringify(error?.errors ?? error?.message ?? error);
-  if (text.includes('invalid_grant')) return ['The refresh token is expired or revoked.', 'Run npm run google:auth again.'];
-  if (text.includes('DEVELOPER_TOKEN_NOT_APPROVED') || text.includes('only approved for use with test accounts')) return ['The developer token is test-only.', 'Apply for production access under Admin > API Center in your manager account.'];
-  if (text.includes('DEVELOPER_TOKEN')) return ['Google rejected the developer token.', 'Copy it again from Admin > API Center.'];
+  if (text.includes('invalid_grant')) return ['The refresh token is expired or revoked.', 'If the OAuth app in Google Cloud is still in Testing, publish it first, because tokens expire after 7 days there. Then run npm run google:auth again.'];
+  if (text.includes('CLOUD_PROJECT_NOT_APPROVED_FOR_PRODUCTION')) return ['This Google Cloud project only has Test access.', 'Apply for Explorer access on the Google Ads API Overview page in Google Cloud.'];
   if (text.includes('USER_PERMISSION_DENIED')) return ['This login cannot reach the account.', 'Give the Google user access, and check GOOGLE_ADS_LOGIN_CUSTOMER_ID is the manager above this account.'];
   if (text.includes('CUSTOMER_NOT_ENABLED')) return ['The account is not active.', 'Enable it, or set enabled = false for it in the accounts table.'];
   if (text.includes('SERVICE_DISABLED') || text.includes('has not been used in project')) return ['The Google Ads API is off in this Google Cloud project.', 'Enable it in Google Cloud under APIs and services.'];
@@ -82,9 +81,9 @@ if (requireVars(['NEXT_PUBLIC_SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'], 'Copy
 }
 
 section('Google Ads');
-if (requireVars(['GOOGLE_ADS_CLIENT_ID', 'GOOGLE_ADS_CLIENT_SECRET', 'GOOGLE_ADS_DEVELOPER_TOKEN', 'GOOGLE_ADS_REFRESH_TOKEN'], 'See "Connect Google Ads" in docs/SETUP.md.') && accounts.length) {
+if (requireVars(['GOOGLE_ADS_CLIENT_ID', 'GOOGLE_ADS_CLIENT_SECRET', 'GOOGLE_ADS_REFRESH_TOKEN'], 'See "Connect Google Ads" in docs/SETUP.md.') && accounts.length) {
   const { GoogleAdsApi } = require('google-ads-api');
-  const api = new GoogleAdsApi({ client_id: env.GOOGLE_ADS_CLIENT_ID, client_secret: env.GOOGLE_ADS_CLIENT_SECRET, developer_token: env.GOOGLE_ADS_DEVELOPER_TOKEN });
+  const api = new GoogleAdsApi({ client_id: env.GOOGLE_ADS_CLIENT_ID, client_secret: env.GOOGLE_ADS_CLIENT_SECRET });
   for (const account of accounts.filter(a => a.enabled)) {
     try {
       const customer = api.Customer({

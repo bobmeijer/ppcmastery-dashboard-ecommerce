@@ -2,7 +2,7 @@
 // One-time Google Ads login: opens the consent flow, stores the refresh token in .env.local
 // (never printed) and lists the accounts this login can reach.
 //
-// Needs in .env.local: GOOGLE_ADS_CLIENT_ID, GOOGLE_ADS_CLIENT_SECRET, GOOGLE_ADS_DEVELOPER_TOKEN.
+// Needs in .env.local: GOOGLE_ADS_CLIENT_ID, GOOGLE_ADS_CLIENT_SECRET.
 // The Google Cloud OAuth client must be of the type "Desktop app".
 //
 //   npm run google:auth
@@ -18,7 +18,7 @@ const REDIRECT_URI = `http://localhost:${PORT}/callback`;
 const SCOPE = 'https://www.googleapis.com/auth/adwords';
 
 loadEnv();
-const { GOOGLE_ADS_CLIENT_ID: clientId, GOOGLE_ADS_CLIENT_SECRET: clientSecret, GOOGLE_ADS_DEVELOPER_TOKEN: developerToken } = process.env;
+const { GOOGLE_ADS_CLIENT_ID: clientId, GOOGLE_ADS_CLIENT_SECRET: clientSecret } = process.env;
 if (!clientId || !clientSecret) {
   console.error('Add GOOGLE_ADS_CLIENT_ID and GOOGLE_ADS_CLIENT_SECRET to .env.local first.');
   process.exit(1);
@@ -61,12 +61,8 @@ if (!tokens.refresh_token) {
 saveToken(tokens.refresh_token);
 console.log('Saved GOOGLE_ADS_REFRESH_TOKEN in .env.local.');
 
-if (!developerToken) {
-  console.log('Add GOOGLE_ADS_DEVELOPER_TOKEN, then run npm run doctor.');
-  process.exit(0);
-}
 const { GoogleAdsApi } = createRequire(import.meta.url)('google-ads-api');
-const api = new GoogleAdsApi({ client_id: clientId, client_secret: clientSecret, developer_token: developerToken });
+const api = new GoogleAdsApi({ client_id: clientId, client_secret: clientSecret });
 const { resource_names: names = [] } = await api.listAccessibleCustomers(tokens.refresh_token);
 console.log(`\nThis login can reach ${names.length} account(s) directly:`);
 for (const name of names) console.log(`  ${name.replace('customers/', '')}`);

@@ -2,7 +2,7 @@
 
 ## When to use it
 
-You cannot or do not want to use the Google Ads API, for example because you have no developer token. Or the data already sits in a warehouse or a connector you pay for. The app needs its fact tables filled. It does not care how.
+You cannot or do not want to use the Google Ads API, for example because Google has not approved your Cloud project for production accounts. Or the data already sits in a warehouse or a connector you pay for. The app needs its fact tables filled. It does not care how.
 
 The contract is `docs/table-contracts.md`.
 

@@ -31,11 +31,14 @@ Copy `.env.example` to `.env.local`. Generate `NEXTAUTH_SECRET` and `CRON_SECRET
 
 ## 4. Connect Google Ads
 
-1. In Google Cloud, enable the Google Ads API.
-2. Create an OAuth client of the type "Desktop app". Add its ID and secret to the environment file.
-3. In the manager account, open Admin > API Center and copy the developer token. It must have production access. A test-only token cannot read real accounts.
-4. Run `npm run google:auth`. It stores the refresh token and lists the accounts the login can reach.
-5. If they use a manager account, set `GOOGLE_ADS_LOGIN_CUSTOMER_ID` to its ID without dashes.
+No developer token is needed: Google retired those on 9 September 2026. Access now belongs to the Google Cloud project that owns the OAuth client.
+
+1. In Google Cloud, create or pick a project and enable the Google Ads API. If they used the API before the token sunset, reuse the project that made those calls, because the access level moved to it.
+2. On the Google Ads API Overview page of that project, check the access level. Test access cannot read real accounts. Have them apply for Explorer access there. Google may reject projects on a Cloud free trial, and then the project needs a paid tier.
+3. Under Google Auth Platform > Audience, use Internal if their Workspace allows it, otherwise External and Publish app. In Testing, refresh tokens expire after 7 days and the sync stops.
+4. Create an OAuth client of the type "Desktop app". Add its ID and secret to the environment file.
+5. Run `npm run google:auth`. Google may warn that the app is not verified. It is their own app, so they can continue under Advanced. The script stores the refresh token and lists the accounts the login can reach.
+6. If they use a manager account, set `GOOGLE_ADS_LOGIN_CUSTOMER_ID` to its ID without dashes.
 
 ## 5. Add the accounts and a login
 
@@ -89,7 +92,7 @@ Run `npm run doctor` again. It now reports how many campaign names match the nam
 
 ## 8. Deploy
 
-Push to a **private** repo and import it in Vercel. Add the same environment variables, with `NEXTAUTH_URL` set to the real address. `vercel.json` runs one sync a day through `/api/cron/daily`. Steps that do not fit in the time limit are reported under `skipped`. The order is fixed, so the same steps can be skipped every day: if that happens, see `docs/recipes/faster-sync.md`.
+Push to a **private** repo and import it in Vercel. Vercel's free Hobby plan is for non-commercial personal use only, so client work needs Pro. Add the same environment variables, with `NEXTAUTH_URL` set to the real address. `vercel.json` runs one sync a day through `/api/cron/daily`. Test it under Schedules in the Vercel project with Run Schedule. Steps that do not fit in the time limit are reported under `skipped`. The order is fixed, so the same steps can be skipped every day: if that happens, see `docs/recipes/faster-sync.md`.
 
 ## Check before you finish
 

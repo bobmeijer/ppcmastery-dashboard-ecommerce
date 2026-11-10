@@ -7,11 +7,10 @@ const getApi = (): GoogleAdsApi => {
   if (api) return api;
   const clientId = process.env.GOOGLE_ADS_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_ADS_CLIENT_SECRET;
-  const developerToken = process.env.GOOGLE_ADS_DEVELOPER_TOKEN;
-  if (!clientId || !clientSecret || !developerToken) {
+  if (!clientId || !clientSecret) {
     throw new Error('Google Ads API credentials are missing');
   }
-  api = new GoogleAdsApi({ client_id: clientId, client_secret: clientSecret, developer_token: developerToken });
+  api = new GoogleAdsApi({ client_id: clientId, client_secret: clientSecret });
   return api;
 };
 
@@ -32,7 +31,7 @@ const errorText = (error: unknown): string => {
 
 const isPermanent = (error: unknown) => {
   const message = errorText(error);
-  return ['USER_PERMISSION_DENIED', 'AUTHENTICATION_ERROR', 'INVALID_ARGUMENT', 'QUERY_ERROR', 'is deprecated']
+  return ['USER_PERMISSION_DENIED', 'AUTHENTICATION_ERROR', 'CLOUD_PROJECT_NOT_APPROVED_FOR_PRODUCTION', 'INVALID_ARGUMENT', 'QUERY_ERROR', 'is deprecated']
     .some(token => message.includes(token));
 };
 
