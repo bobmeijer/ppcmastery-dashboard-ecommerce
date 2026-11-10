@@ -5,7 +5,6 @@
 // conversation; a question it cannot answer, or one that asks for a decision or advice,
 // it offers to put to the account manager.
 import { ACCOUNTS, BRAND } from '@/lib/config';
-import { withMethodology } from './methodology';
 import 'server-only';
 import type Anthropic from '@anthropic-ai/sdk';
 import { runToolLoop, type LoopUsage } from './claudeLoop';
@@ -83,7 +82,7 @@ export async function runChat({ ctx, brief, signals, analysis, corrections = '',
   for (let attempt = 0; attempt < 2; attempt += 1) {
     reset();
     const { parsed, corpus, costUsd, model: m, usage: u, turns: n } = await runToolLoop<string>({
-      model: CHAT_MODEL, effort: 'high', fast: true, system: withMethodology(SYSTEM), ctx, maxTurns: MAX_TURNS, onStep, messages,
+      model: CHAT_MODEL, effort: 'high', fast: true, system: SYSTEM, ctx, maxTurns: MAX_TURNS, onStep, messages,
       onText: delta => { buffer += delta; flush(); }, onReset: reset,
     });
     cost += costUsd;

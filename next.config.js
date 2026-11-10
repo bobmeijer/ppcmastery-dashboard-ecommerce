@@ -34,8 +34,6 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   serverExternalPackages: ['google-ads-api'],
-  // Optional, gitignored: ships with the functions when it exists locally at build time.
-  outputFileTracingIncludes: { '/api/**/*': ['./context/methodology.md'] },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },

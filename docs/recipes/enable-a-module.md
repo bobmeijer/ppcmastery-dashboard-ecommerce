@@ -39,7 +39,6 @@ You want an optional part of the dashboard on your real data. In the demo everyt
 - Add `ANTHROPIC_API_KEY`. With a key that is not tied to a workspace, also set `ANTHROPIC_WORKSPACE_ID`.
 - Spending stops at `MONTHLY_CAP_USD` in `src/lib/claudeLoop.ts`, which is 55 USD. Change it to suit you.
 - Report data goes to the API. Check that this fits your client agreements.
-- Optional: put your own way of analysing accounts in `context/methodology.md`. The file is gitignored.
 - Optional: the "ask the account manager" button mails you through Resend, with `RESEND_API_KEY`, `ESCALATION_MAIL_FROM` and `ESCALATION_MAIL_TO`. Without them the question is still flagged in `chat_messages`.
 
 ### Microsoft Ads

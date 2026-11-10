@@ -5,7 +5,6 @@
 // is dropped; when nothing usable comes back the computed signals are shown as they are.
 import { ACCOUNTS, BRAND, moduleEnabled } from '@/lib/config';
 import type { ModuleKey } from '../../dashboard.config';
-import { withMethodology } from './methodology';
 import 'server-only';
 import { runToolLoop } from './claudeLoop';
 import type { ToolContext } from './insightTools';
@@ -96,7 +95,7 @@ export function fallbackStory(facts: SignalFact[]): Story {
 export async function runAgent({ ctx, facts, brief, onStep, fast = false, corrections = '' }: AgentInput & { fast?: boolean; corrections?: string }): Promise<AgentResult> {
   const signals = facts.map(({ id, severity, level, subject, metric, from, to, delta, context }) => ({ id, severity, level, subject, metric, from, to, delta, context }));
   const { parsed, corpus, calls, costUsd } = await runToolLoop<{ headline: string; points: { text: string; type: 'fact' | 'interpretation'; link_page: LinkPage; sources: string[] }[] }>({
-    model: AGENT_MODEL, effort: 'high', fast, cite: true, system: withMethodology(SYSTEM), schema: SCHEMA, ctx, maxTurns: MAX_TURNS, onStep,
+    model: AGENT_MODEL, effort: 'high', fast, cite: true, system: SYSTEM, schema: SCHEMA, ctx, maxTurns: MAX_TURNS, onStep,
     messages: [{ role: 'user', content: `${brief}\n\nComputed signals (starting point):\n${JSON.stringify(signals, null, 1)}${corrections ? `\n\nthe account manager's corrections of earlier analyses of this account:\n${corrections}` : ''}` }],
   });
   const fallback: AgentResult = { story: fallbackStory(facts), source: 'fallback', costUsd };

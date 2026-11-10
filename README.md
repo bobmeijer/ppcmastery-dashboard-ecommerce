@@ -232,7 +232,7 @@ Then open the dashboard and look at the Status page.
 
 ## Support
 
-This is shared as is, without a support promise. Members of [The PPC Hub](https://hub.ppcmastery.com) get the walkthrough video, a methodology pack for the AI prompts, and a place to ask questions.
+This is shared as is, without a support promise. Members of [The PPC Hub](https://hub.ppcmastery.com) get the walkthrough video and a place to ask questions.
 
 ## License
 

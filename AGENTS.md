@@ -86,12 +86,11 @@ To set up real data, follow `docs/SETUP.md`.
 | A metric, column or KPI tile | `docs/recipes/add-a-metric.md` |
 | A new page | `docs/recipes/add-a-page.md` |
 | Turn on an optional module | `docs/recipes/enable-a-module.md` |
-| Lead generation instead of ecommerce | `docs/recipes/lead-gen-accounts.md` |
 | Profit or POAS | `docs/recipes/add-poas.md` |
 | Sync schedule or windows | `docs/recipes/faster-sync.md` |
 | Data from somewhere other than the API | `docs/recipes/add-another-data-route.md` |
 | Meeting and email digests | `docs/recipes/build-a-digest-step.md` |
-| AI prompts | `SYSTEM` in `src/lib/insightAgent.ts` and `src/lib/chatAgent.ts`. Optional house style in `context/methodology.md` (gitignored) |
+| AI prompts | `SYSTEM` in `src/lib/insightAgent.ts` and `src/lib/chatAgent.ts` |
 | AI spend cap and models | `MONTHLY_CAP_USD` and `PRICES` in `src/lib/claudeLoop.ts`, `AGENT_MODEL` in `src/lib/insightAgent.ts`, `CHAT_MODEL` in `src/lib/chatAgent.ts` |
 | A different database, host, AI, login or email tool | "Swapping a tool" in `docs/ARCHITECTURE.md` |
 

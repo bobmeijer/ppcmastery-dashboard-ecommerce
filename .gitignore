@@ -17,9 +17,6 @@
 *.tsbuildinfo
 next-env.d.ts
 
-# your own AI methodology, read by the AI modules when present
-/context/methodology.md
-
 # local scratch
 /.scratch/
 .DS_Store
