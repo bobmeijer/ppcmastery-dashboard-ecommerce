@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "schedules": {
+    "daily-sync": {
+      "schedule": "0 5 * * *",
+      "path": "/api/cron/daily",
+      "requestMethod": "GET"
+    }
+  }
+}

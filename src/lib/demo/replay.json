@@ -1,0 +1,208 @@
+{
+ "generatedFor": "2026-11-10",
+ "model": "claude-opus-5-5",
+ "costUsd": 0.98,
+ "accounts": {
+  "shopa": {
+   "story": {
+    "headline": "October recovered clearly from the mobile checkout fault in the comparison period, but at a ROAS of 521% it is still below the 550% goal, mainly because mobile converts weakly.",
+    "points": [
+     {
+      "text": "The comparison period was hit by a checkout update that broke mobile payment for about three weeks until the 21 September fix, so mobile CVR was only 0.41% then, against 0.71% in matured October.",
+      "type": "fact",
+      "link": {
+       "path": "/devices"
+      },
+      "sources": [
+       {
+        "kind": "context",
+        "source": "Account notes",
+        "date": "2026-10-08",
+        "text": "A checkout update on the Cinderfold site broke the payment step on mobile for about three weeks. It was fixed on 21 September 2026. Evidence: Shop order numbers fell on mobile only over the same days."
+       },
+       {
+        "kind": "data",
+        "label": "Devices, 27 Aug 2026 to 26 Sep 2026",
+        "path": "/devices",
+        "params": {
+         "preset": "custom",
+         "start": "2026-08-27",
+         "end": "2026-09-26"
+        }
+       },
+       {
+        "kind": "data",
+        "label": "Devices, 1 Oct 2026 to 19 Oct 2026",
+        "path": "/devices",
+        "params": {
+         "preset": "custom",
+         "start": "2026-10-01",
+         "end": "2026-10-19"
+        }
+       }
+      ]
+     },
+     {
+      "text": "The recovery shows as a break, not a slow climb: weekly ROAS went from 382% in the week of 21 September to 522% in the week of 5 October and 540% in the week of 12 October.",
+      "type": "fact",
+      "link": {
+       "path": "/trends"
+      },
+      "sources": [
+       {
+        "kind": "data",
+        "label": "Campaign data per week, 24 Aug 2026 to 1 Nov 2026",
+        "path": "/trends",
+        "params": {
+         "preset": "custom",
+         "start": "2026-08-24",
+         "end": "2026-11-01"
+        }
+       }
+      ]
+     },
+     {
+      "text": "The gap to goal seems to sit mostly on mobile: in matured October it took €10,407 of spend at a ROAS of 334% and CVR of 0.71%, against 819% and 1.74% on desktop.",
+      "type": "interpretation",
+      "link": {
+       "path": "/devices"
+      },
+      "sources": [
+       {
+        "kind": "data",
+        "label": "Devices, 1 Oct 2026 to 19 Oct 2026",
+        "path": "/devices",
+        "params": {
+         "preset": "custom",
+         "start": "2026-10-01",
+         "end": "2026-10-19"
+        }
+       }
+      ]
+     },
+     {
+      "text": "The same weeks last year converted better, at a CVR of 1.33% and 1.34% against 1.10% and 1.17% now, which points to conversion not yet being fully back to last year's level.",
+      "type": "interpretation",
+      "link": {
+       "path": "/trends"
+      },
+      "sources": [
+       {
+        "kind": "data",
+        "label": "Campaign data per week, 25 Aug 2025 to 2 Nov 2025",
+        "path": "/trends",
+        "params": {
+         "preset": "custom",
+         "start": "2025-08-25",
+         "end": "2025-11-02"
+        }
+       },
+       {
+        "kind": "data",
+        "label": "Campaign data per week, 24 Aug 2026 to 1 Nov 2026",
+        "path": "/trends",
+        "params": {
+         "preset": "custom",
+         "start": "2026-08-24",
+         "end": "2026-11-01"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "chat": {
+    "why is revenue below goal?": "Up to 19 October (the last day with complete revenue), revenue is €93,465. The goal over those 19 days is €107,258, so you are at 87% of it. The main reason is that mobile converts poorly:\n\n- Mobile took €10,407 of spend but brought in only €34,762, a ROAS of 334%. Its conversion rate was 0.71%, against 1.74% on desktop, where €6,280 of spend returned €51,456 (819%).\n- Conversion overall is also still below last year. The same weeks last year converted at 1.33% and 1.34%, against 1.10% and 1.17% now.\n- The account notes explain the mobile fault in September: a checkout update broke mobile payment until it was fixed on 21 September. They don't record a cause for mobile staying weak in October, so I can't tell you why it hasn't fully recovered.\n- Some reach is also being missed. Non-Branded Shopping, the largest source of revenue at €43,477, lost 13.37% of its possible impressions to budget and 28.61% to ad rank (how its ads rank against competitors in the auction). For Non-Branded Search those figures are 10.60% and 25.54%.\n\nRevenue after 19 October isn't complete yet, so it isn't included here.",
+    "which campaign has the most room to grow?": "Which campaign to grow, and by how much, is a decision for your account manager. These are the facts that matter for it. They come from matured October (1 to 19 October), the part where revenue is complete. \"IS lost\" means the share of possible ad appearances the campaign missed, either because its budget ran out or because its ad ranking was too low.\n\nCampaigns that miss the most appearances because of budget:\n- 08 | Stoves [H]: lost 23.12% to budget and 31.92% to ranking, ROAS 641%, cost €3,161\n- 02 | Stoves [H+S]: lost 19.73% to budget, ROAS 409%, cost €2,585\n- 08 | Planters + Pots [H+S]: lost 14.63% to budget, ROAS 306%, cost €1,806\n- 05 | Stoves [H+S]: lost 12.84% to budget, ROAS 535%, cost €2,080\n\nEvery other campaign loses less than 6% to budget. The largest loss to ranking is in 08 | Lighting [S], at 42.65% with a ROAS of 264%. 01 | Brand has the highest ROAS, 2,605%, and loses only 3.56% to budget. Your account manager can weigh these figures against the 550% ROAS goal.",
+    "how does this period compare with last year?": "Compared like for like (1 to 19 October, the part where revenue is complete), this year brings slightly more revenue and purchases than last year, but at a lower ROAS. It reaches more people, and fewer of them buy.\n\n- Revenue was €93,465 against €91,049 last year, and purchases were 388 against 377.\n- Cost was €17,943 against €16,256, so ROAS came out at 521% against 560%.\n- Clicks rose to 34,987 from 28,580, and each click was cheaper (CPC €0.51 against €0.57).\n- CVR (the share of clicks that end in a purchase) fell to 1.11% from 1.32%. Order value stayed level at €241 against €242.\n\nMost of the drop in CVR is on mobile. Mobile converted at 0.71% against 1.02% last year, with a ROAS of 334% against 435%. Desktop held up better: CVR was 1.74% against 1.82%, and ROAS actually rose to 819% from 771%.\n\nAcross the full month, traffic grew more than last year: 57,776 clicks against 47,301 and €29,782 in cost against €26,945. Revenue after 19 October is not complete yet, so I've left out the full-month revenue comparison."
+   }
+  },
+  "shopb": {
+   "story": {
+    "headline": "October fell short of goal mainly because a feed export error blocked about a third of Fennmoor's products from 2 to 17 October. Shopping lost reach and got pricier, then recovered once the feed was fixed.",
+    "points": [
+     {
+      "text": "A feed export change removed size and colour on rugs and wall art (feed review of 18 October), and blocked products rose from 10 to 59 of 150 between 2 and 17 October.",
+      "type": "fact",
+      "link": {
+       "path": "/feed"
+      },
+      "sources": [
+       {
+        "kind": "context",
+        "source": "Feed review",
+        "date": "2026-10-18",
+        "text": "A feed export change removed size and colour on rugs and wall art, and about 31% of Fennmoor products were disapproved until the feed was corrected. Evidence: Merchant Center diagnostics showed missing required attributes."
+       },
+       {
+        "kind": "data",
+        "label": "Merchant Center feed",
+        "path": "/feed",
+        "params": {}
+       }
+      ]
+     },
+     {
+      "text": "Non-Branded Shopping impressions fell to 963,574 from 1,111,425 and IS to 50.25% from 62.34%, while CPC rose to €0.44 from €0.37 and ROAS slipped to 363% from 405%.",
+      "type": "fact",
+      "link": {
+       "path": "/campaigns"
+      },
+      "sources": [
+       {
+        "kind": "data",
+        "label": "Campaign data per network, 1 Oct 2026 to 31 Oct 2026",
+        "path": "/campaigns",
+        "params": {
+         "preset": "custom",
+         "start": "2026-10-01",
+         "end": "2026-10-31"
+        }
+       },
+       {
+        "kind": "data",
+        "label": "Campaign data per network, 27 Aug 2026 to 26 Sep 2026",
+        "path": "/campaigns",
+        "params": {
+         "preset": "custom",
+         "start": "2026-08-27",
+         "end": "2026-09-26"
+        }
+       }
+      ]
+     },
+     {
+      "text": "The break follows the outage dates: IS dropped to 45.01% in the week of 5 October, then returned to 61.44% in the week of 26 October, with ROAS 459% and revenue €11,880 that week.",
+      "type": "fact",
+      "link": {
+       "path": "/trends"
+      },
+      "sources": [
+       {
+        "kind": "data",
+        "label": "Campaign data per week, 24 Aug 2026 to 1 Nov 2026",
+        "path": "/trends",
+        "params": {
+         "preset": "custom",
+         "start": "2026-08-24",
+         "end": "2026-11-01"
+        }
+       },
+       {
+        "kind": "data",
+        "label": "Merchant Center feed",
+        "path": "/feed",
+        "params": {}
+       }
+      ]
+     }
+    ]
+   },
+   "chat": {
+    "why is revenue below goal?": "October brought in €41,725 in revenue, 80% of the €52,000 goal, and the main cause was a product feed problem that hit Non-Branded Shopping.\n\n- What happened: a feed export change removed size and colour from rugs and wall art. That left about 31% of products disapproved from 2 October until the feed was corrected (feed review, 18 October).\n- Effect on Shopping: impressions fell to 963,574 from 1,111,425, and the share of possible impressions the ads actually got fell to 50.25% from 62.34%. Cost per click rose to €0.44 from €0.37, so ROAS dropped to 363% from 405%, and revenue fell to €27,704 from €30,639.\n- The rest of the account grew: Branded Search made €10,262 (up from €8,891) and Non-Branded Search made €2,715 (up from €2,236). That wasn't enough to make up for the drop in Shopping.\n\nOnce the feed was fixed, Shopping recovered. In the week of 26 October it brought in €11,880 at a ROAS of 459%.",
+    "which campaign has the most room to grow?": "Which campaign to grow is a decision for the account manager. These are the October figures that bear on it:\n\n- 08 | Rugs [H+S] stands out for budget. It missed 24.27% of possible impressions because its budget ran out. Every other campaign missed between 4.78% and 6.74% for that reason. It had an impression share of 42.23% and a ROAS of 430%.\n- 01 | Brand has the highest ROAS at 1,641%, but its impression share was only 43.86%. It missed 49.40% of impressions on rank (bid and ad quality) and 6.74% on budget.\n- The other campaigns missed between 33.51% and 45.67% of impressions on rank. 05 | Wall art [H+S] missed the most (45.67%), with a ROAS of 336%.\n- These October figures are lower than normal for rugs and wall art. A feed review on 18 October found that a feed export change removed size and colour from those products, so about 31% of products were blocked from 2 to 17 October.",
+    "how does this period compare with last year?": "October 2026 came in below October 2025. The gap is almost entirely in Non-Branded Shopping, the part hit by the feed error. The other networks did slightly better than last year.\n\n- Whole account: revenue €41,725 against €45,958 last October, 293 purchases against 322, and ROAS 432% against 457%. Cost was lower too, €9,660 against €10,060.\n- Non-Branded Shopping: revenue €27,704 against €33,125, impressions 963,574 against 1,185,106, and impression share (how often your ads showed when they could have) 50.25% against 62.66%. CPC was €0.44 against €0.38, and ROAS was 363% against 405%.\n- Branded Search: revenue €10,262 against €9,515, 87 purchases against 82.\n- Non-Branded Search: revenue €2,715 against €2,353, 19 purchases against 17.\n- Display: revenue €1,044 against €964.\n\nConversion rate (1.27% against 1.22%) and average order value (€142 against €143) stayed about the same. So the drop came from showing up less often, not from visitors buying less once they arrived. All October revenue is complete, because figures have matured up to 2 November."
+   }
+  }
+ }
+}

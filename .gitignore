@@ -1,0 +1,27 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+/build
+
+# env files: never commit credentials
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# your own AI methodology, read by the AI modules when present
+/context/methodology.md
+
+# local scratch
+/.scratch/
+.DS_Store
+npm-debug.log*
+

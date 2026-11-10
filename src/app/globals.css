@@ -1,0 +1,505 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Design tokens: monochrome base, one warm accent */
+  --paper: #ffffff;
+  --paper-alt: #f6f6f4;
+  --ink: #0a0a0a;
+  --ink-soft: #2b2b2b;
+  --gray-600: #555555;
+  --gray-500: #767676;
+  --gray-400: #9a9a9a;
+  --gray-300: #d9d9d6;
+  --gray-200: #e8e8e4;
+  --line: #e6e6e2;
+  --accent: #ff5a1f;
+  --accent-hover: #e84e15;
+  --accent-ink: #ffffff;
+  --good: #1f7a4d;
+  --warn: #b7791f;
+  --bad: #c0392b;
+  --lag: rgba(10, 10, 10, 0.045);
+  --font-sans: var(--font-geist), system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+:root {
+  --series-1: #0a0a0a;   /* primary (revenue) */
+  --series-2: #ff5a1f;   /* secondary (cost) */
+  --series-3: #1f7a4d;   /* ratio line (ROAS) */
+  --series-4: #9a9a9a;   /* comparison */
+  --card-shadow: none;
+  --card-border: var(--line);
+  --card-radius: 10px;
+  --tile-radius: 10px;
+  --kpi-size: 1.5rem;
+  --page-gap: 1.5rem;
+}
+
+html { color-scheme: light; }
+body {
+  background: var(--paper-alt);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: 'ss01', 'cv11', 'tnum';
+}
+
+.num { font-variant-numeric: tabular-nums; }
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+}
+.kpi-value { font-size: var(--kpi-size); }
+
+.eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+
+/* Same height and shape as the top-bar controls on every page. */
+.btn-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 2.125rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 0.5rem;
+  padding: 0 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--ink-soft);
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.btn-chip:hover:not(:disabled) { border-color: var(--gray-400); }
+.btn-chip:disabled { color: var(--gray-300); cursor: default; }
+.btn-chip[data-active='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.nav-link {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.5rem 0.75rem; border-radius: 8px;
+  color: var(--ink-soft); font-size: 0.92rem;
+  white-space: nowrap;
+}
+.nav-link:hover { background: var(--paper-alt); }
+.nav-link[data-active='true'] { background: var(--ink); color: var(--paper); }
+
+input, select {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.45rem 0.65rem;
+  background: var(--paper);
+  font: inherit;
+}
+input:focus, select:focus { outline: 2px solid var(--ink); outline-offset: 1px; }
+/* Top bar controls share the chip size. */
+
+table.data { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+table.data th { text-align: left; font-weight: 500; color: var(--gray-500); padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table.data th.num, table.data td.num { text-align: right; white-space: nowrap; }
+table.data td { padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--gray-200); }
+table.data tr:last-child td { border-bottom: 0; }
+/* every second body row gets a light grey plate, starting at row 2. */
+table.data tbody tr:nth-child(even) td { background: var(--paper-alt); }
+/* wide tables scroll sideways and keep the first column pinned. */
+table.data th:first-child, table.data td:first-child { position: sticky; left: 0; z-index: 1; background: var(--paper); box-shadow: 1px 0 0 var(--line); }
+table.data tbody tr:nth-child(even) td:first-child { background: var(--paper-alt); }
+table.data th[data-sortable='true'] { cursor: pointer; }
+table.data th[data-sorted='true'] { color: var(--ink); }
+/* Comparison mode: two-line cells, keep the first line of every cell on one baseline. */
+table.data[data-compare='true'] td { vertical-align: top; }
+/* The first column never wraps; the comparison lines below the values stay on one line too. */
+table.data th:first-child, table.data td:first-child { white-space: nowrap; }
+table.data[data-compare='true'] td.num > div > div { white-space: nowrap; }
+
+.lag-badge {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  /* accent tint instead of alarm yellow, so it sits with the palette. */
+  background: #fff0e8;
+  color: var(--accent-hover);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+/* The conversion lag flag: warning icon + "Conversion lag", sentence case,
+   tinted border. In the header .topbar-control sizes it; elsewhere --inline. */
+.lag-badge--flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  border: 1px solid #fbd9c6;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.lag-badge--inline {
+  gap: 0.3rem;
+  padding: 0.125rem 0.45rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+/* Same badge for periods outside the expectation band; blue so it never reads as lag or as good/bad. */
+.lag-badge--anomaly {
+  background: #e8eefc;
+  color: #2f4fb5;
+}
+
+/* Info icon behind a badge, opens a short explanation (components/Badges.tsx). */
+.info-tip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-400);
+  cursor: pointer;
+  border-radius: 999px;
+  line-height: 0;
+}
+.info-tip:hover, .info-tip[aria-expanded='true'] { color: var(--ink); }
+.info-tip:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.info-popover {
+  position: fixed;
+  z-index: 60;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  box-shadow: 0 8px 24px rgba(10, 10, 10, 0.08);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: normal;
+  text-align: left;
+}
+.info-popover-title { font-weight: 600; color: var(--ink); margin-bottom: 0.2rem; }
+
+/* Table variants */
+table.data[data-variant='B'] { font-size: 13px; }
+table.data[data-variant='B'] td, table.data[data-variant='B'] th { padding: 0.4rem 0.5rem; }
+table.data[data-variant='B'] tbody tr:nth-child(even) td { background: var(--paper-alt); }
+table.data[data-variant='B'] td.num { font-family: var(--font-mono); font-size: 12.5px; }
+.bar-cell { position: relative; }
+.bar-cell > .bar { position: absolute; inset: 0.3rem 0 0.3rem auto; width: var(--w); background: var(--paper-alt); border-radius: 3px; z-index: 0; }
+.bar-cell > .bar[data-tone='good'] { background: #e3f3ea; }
+.bar-cell > .bar[data-tone='bad'] { background: #fbe4e1; }
+.bar-cell > span { position: relative; z-index: 1; }
+
+/* Product thumbnail (feed image) in product tables and panels. */
+.product-thumb {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--paper-alt);
+}
+.product-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Bucket chips and tiles (Products, Buckets): ProductHero's four colours in
+   the dashboard palette. Heroes good, sidekicks warm, villains bad, zombies grey. */
+.bucket-chip {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.45;
+  white-space: nowrap;
+  background: var(--paper-alt);
+  color: var(--gray-600);
+}
+.bucket-chip[data-label='H'] { background: #e3f1e9; color: var(--good); }
+.bucket-chip[data-label='S'] { background: #fbf1df; color: var(--warn); }
+.bucket-chip[data-label='V'] { background: #f9e5e2; color: var(--bad); }
+.bucket-chip[data-label='Z'] { background: var(--gray-200); color: var(--ink-soft); }
+.bucket-tile {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  background: var(--paper);
+  transition: border-color 120ms ease;
+}
+.bucket-tile:hover { border-color: var(--gray-400); }
+.bucket-tile[data-active='true'] { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink) inset; }
+
+/* Product panel (Products): right-hand drawer and the label strip per day. */
+.product-panel { box-shadow: -12px 0 32px rgba(10, 10, 10, 0.08); }
+.label-cell { border-radius: 1px; background: var(--gray-200); }
+.label-cell[data-label='H'] { background: var(--good); }
+.label-cell[data-label='S'] { background: var(--warn); }
+.label-cell[data-label='V'] { background: var(--bad); }
+.label-cell[data-label='Z'] { background: var(--gray-400); }
+.label-cell[data-empty='true'] { opacity: 0.3; }
+
+/* Buckets: transition matrix (from label x to label). */
+.transition-matrix { border-collapse: separate; border-spacing: 4px; }
+.transition-matrix th { padding: 0 0.4rem; font-weight: 500; }
+/* Fixed size so empty cells (a dash) match the two-line cells. */
+.transition-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  width: 6.5rem;
+  height: 3.25rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  text-align: right;
+}
+.transition-cell[data-diagonal='true'] { background: var(--paper-alt); color: var(--gray-500); }
+.transition-cell:not(:disabled):hover { border-color: var(--gray-400); }
+.transition-cell[data-active='true'] { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink) inset; color: var(--ink); }
+.transition-cell:disabled { color: var(--gray-300); border-style: dashed; cursor: default; }
+
+/* Buckets: mini label strip per mover (one block per day). */
+.mini-strip { display: inline-flex; width: 9rem; height: 0.6rem; gap: 0; border-radius: 2px; overflow: hidden; background: var(--gray-200); vertical-align: middle; }
+.mini-strip > span { flex: 1 1 0; min-width: 0; background: var(--gray-200); }
+.mini-strip > span[data-label='H'] { background: var(--good); }
+.mini-strip > span[data-label='S'] { background: var(--warn); }
+.mini-strip > span[data-label='V'] { background: var(--bad); }
+.mini-strip > span[data-label='Z'] { background: var(--gray-400); }
+.mini-strip > span[data-empty='true'] { opacity: 0.3; }
+/* Phones: shorter strip when the reader switches the Per dag column on. */
+@media (max-width: 639px) { .mini-strip { width: 6rem; } }
+
+/* Buckets: direction of a label switch (What a switch does). */
+.direction-pill {
+  display: inline-block;
+  min-width: 4.4rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  background: var(--paper-alt);
+  color: var(--gray-600);
+}
+.direction-pill[data-direction='up'] { background: #e3f1e9; color: var(--good); }
+.direction-pill[data-direction='down'] { background: #f9e5e2; color: var(--bad); }
+
+/* Buckets page: bucket tiles share the full card width (one column per label from lg). */
+.bucket-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 1024px) { .bucket-grid { grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); } }
+
+/* Metric tree: bucket colours */
+:root {
+  --bucket-traffic: #2f5bff;
+  --bucket-creative: #2e7d4f;
+  --bucket-conversion: #f48c06;
+  --bucket-business: #0c0a3e;
+}
+/* Quality Score: component rating (2 below, 3 average, 4 above average). */
+.qs-pill {
+  display: inline-block;
+  padding: 0.08rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--paper-alt);
+  color: var(--gray-600);
+}
+.qs-pill[data-bucket='2'] { background: #f9e5e2; color: var(--bad); }
+.qs-pill[data-bucket='4'] { background: #e3f1e9; color: var(--good); }
+/* Component bars: one 100% bar per component on the same scale. */
+.qs-bar-row { display: grid; grid-template-columns: minmax(12rem, 0.9fr) minmax(0, 3fr) 9rem; align-items: center; column-gap: 1.25rem; }
+.qs-bar { display: flex; height: 1.6rem; border-radius: 6px; overflow: hidden; background: var(--paper-alt); }
+.qs-bar-seg { display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; color: #fff; white-space: nowrap; }
+.qs-bar-seg[data-seg='average'] { color: var(--ink-soft); }
+.qs-binding { padding: 0.05rem 0.45rem; border-radius: 999px; font-size: 0.66rem; font-weight: 600; background: var(--ink); color: var(--paper); }
+@media (max-width: 767px) { .qs-bar-row { grid-template-columns: 1fr; row-gap: 0.35rem; } .qs-bar-row > :last-child { text-align: left; } }
+
+/* Metric tree funnel: stages down the centre, rates as pills, side tiles in the stage type scale. */
+.tree-grid { position: relative; display: grid; grid-template-columns: minmax(21.5rem, 1fr) minmax(0, 32rem) minmax(21.5rem, 1fr); column-gap: 1.5rem; padding: 0.25rem 0; }
+.tree-band { grid-column: 1 / -1; z-index: 0; margin: 0.5rem 0; border-radius: var(--card-radius); background: var(--paper-alt); }
+.tree-band-label { grid-column: 1; z-index: 1; align-self: start; padding: 1.35rem 0 0 1.1rem; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); }
+.tree-cell { z-index: 1; display: flex; align-items: center; padding: 1.1rem 0; }
+.tree-left { grid-column: 1; position: relative; justify-content: flex-end; padding: 0 0 0 1rem; }
+.tree-right { grid-column: 3; position: relative; justify-content: flex-start; padding: 0 1rem 0 0; }
+/* equal space above and below every pill, so side tiles must not stretch a row. */
+.tree-left > .tree-side, .tree-right > .tree-side { position: absolute; top: 50%; transform: translateY(-50%); }
+.tree-left > .tree-side { right: 0; max-width: calc(100% - 1rem); }
+.tree-right > .tree-side { left: 0; max-width: calc(100% - 1rem); }
+.tree-center { grid-column: 2; flex-direction: column; align-items: center; justify-content: center; padding: 0; }
+/* The line into and out of a stage stretches with the row, so it always touches the stage. */
+.tree-wire { position: relative; flex: none; height: 1.3rem; width: 1px; background: var(--gray-300); }
+.tree-wire[data-hidden] { visibility: hidden; }
+.tree-wire-head { position: absolute; left: -5px; bottom: 0; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid var(--gray-400); }
+.tree-stage { flex: none; padding: 0.9rem 1.15rem; border: 1px solid var(--card-border); border-radius: var(--card-radius); background: var(--paper); }
+.tree-label { display: flex; align-items: center; gap: 0.35rem; min-width: 0; white-space: nowrap; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.02em; color: var(--gray-500); }
+.tree-dot { display: inline-block; width: 0.45rem; height: 0.45rem; border-radius: 999px; }
+.tree-value { font-size: var(--kpi-size); font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; margin-top: 0.2rem; }
+.tree-meta { display: flex; align-items: baseline; gap: 0.6rem; margin-top: 0.25rem; font-size: 0.78rem; white-space: nowrap; }
+.tree-delta { font-size: 0.78rem; font-weight: 500; }
+/* Side tiles share the stage tile's padding and type scale. */
+.tree-side { width: 18rem; padding: 0.9rem 1.15rem; border: 1px solid var(--card-border); border-radius: var(--card-radius); background: var(--paper); }
+.tree-side-line + .tree-side-line { margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid var(--gray-200); }
+.tree-side[data-pair] { display: grid; grid-template-columns: auto auto; column-gap: 1.1rem; width: max-content; min-width: 18rem; }
+.tree-side[data-pair] .tree-side-line + .tree-side-line { margin-top: 0; padding-top: 0; border-top: 0; padding-left: 1.1rem; border-left: 1px solid var(--gray-200); }
+.tree-link { grid-column: 2; z-index: 2; position: relative; display: flex; justify-content: center; align-items: center; height: 4rem; }
+/* One continuous line from the stage above to the stage below (reaches into the cells' padding). */
+.tree-link-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-0.5px); background: var(--gray-300); }
+.tree-chip { position: relative; display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.22rem 0.75rem; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); font-size: 0.8rem; white-space: nowrap; }
+/* Lever focus from the legend: everything outside the lever steps back. */
+.tree-stage, .tree-side-line, .tree-chip > *, .tree-bridge-row { transition: opacity 120ms ease; }
+[data-dim] { opacity: 0.25; }
+/* A pill sits on the connecting line: keep its background solid and fade only its content, or the line shows through. */
+.tree-chip[data-dim] { opacity: 1; border-color: var(--gray-200); }
+.tree-chip[data-dim] > * { opacity: 0.25; }
+/* Quick filters above the metric tree: network group as a segmented control, category as a select. */
+.tree-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.75rem; margin-bottom: 1.25rem; padding-bottom: 1.1rem; border-bottom: 1px solid var(--line); }
+/* Height and radius follow .btn-chip / the top bar. */
+.segmented { display: inline-flex; align-items: stretch; height: 2.125rem; padding: 2px; border: 1px solid var(--line); border-radius: 0.5rem; background: var(--paper-alt); }
+.segmented > button { padding: 0 0.85rem; border-radius: 0.375rem; font-size: 0.85rem; color: var(--ink-soft); }
+.segmented > button:hover:not(:disabled) { color: var(--ink); }
+.segmented > button[aria-pressed='true'] { background: var(--paper); color: var(--ink); font-weight: 500; box-shadow: 0 1px 2px rgba(10, 10, 10, 0.08), 0 0 0 1px var(--line); }
+.segmented > button:disabled { color: var(--gray-300); cursor: default; }
+.tree-legend { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
+.tree-legend-item { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.65rem; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); font-size: 0.78rem; color: var(--ink-soft); cursor: pointer; }
+.tree-legend-item:hover, .tree-legend-item[data-active] { border-color: var(--gray-400); color: var(--ink); }
+.tree-legend-item[aria-pressed='true'] { border-color: var(--ink); color: var(--ink); }
+.tree-legend-text { min-height: 1.25rem; font-size: 0.78rem; color: var(--gray-500); }
+/* Goals at the end of the tree: Conv. value (growth) and ROAS (efficiency), measured like the Overview meters. */
+.tree-goal { margin-top: 0.7rem; padding-top: 0.6rem; border-top: 1px solid var(--gray-200); }
+.tree-side[data-goal] .tree-goal { grid-column: 1 / -1; }
+.tree-goal-track { position: relative; height: 6px; border-radius: 999px; background: var(--gray-200); }
+.tree-goal-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; }
+.tree-goal-tick { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--ink); }
+.tree-goal-text { display: flex; justify-content: space-between; gap: 0.75rem; margin-top: 0.4rem; font-size: 0.75rem; white-space: nowrap; }
+.tree-goal-note { margin-top: 0.15rem; font-size: 0.7rem; color: var(--gray-500); }
+.tree-goal-tag { margin-left: auto; padding: 0.05rem 0.5rem; border: 1px solid var(--line); border-radius: 999px; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.02em; color: var(--ink-soft); background: var(--paper-alt); }
+.tree-goal-tag:hover { border-color: var(--gray-400); color: var(--ink); }
+/* Contribution panel under the tree. */
+.tree-bridge { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
+.tree-bridge-rows { margin-top: 0.6rem; display: grid; row-gap: 0.15rem; }
+.tree-bridge-row { display: grid; grid-template-columns: minmax(8.5rem, 1fr) 4rem minmax(6rem, 1.6fr) 6.5rem; align-items: center; column-gap: 0.75rem; padding: 0.35rem 0; border-bottom: 1px solid var(--gray-200); }
+.tree-bridge-row:last-child { border-bottom: 0; }
+.tree-bridge-track { position: relative; height: 0.65rem; }
+.tree-bridge-axis { position: absolute; left: 50%; top: -0.2rem; bottom: -0.2rem; width: 1px; background: var(--gray-300); }
+.tree-bridge-bar { position: absolute; top: 0; bottom: 0; border-radius: 3px; opacity: 0.85; }
+/* Phone-only parts of the tree, hidden on desktop. */
+.tree-band-tag, .tree-stage-side { display: none; }
+/* Phones and tablets: the three-column grid needs 75rem, so below lg
+   the tree is one vertical column: band name where a band starts, each stage tile with its side
+   metrics inside it, the rate pills on the line between. The funnel still narrows (100 to 87%). */
+@media (max-width: 1023.98px) {
+  .tree-grid { display: flex; flex-direction: column; align-items: stretch; max-width: 34rem; margin: 0 auto; padding: 0; }
+  .tree-band, .tree-band-label, .tree-left, .tree-right { display: none; }
+  .tree-center { width: 100%; }
+  .tree-wire[data-hidden] { display: none; }
+  .tree-band-tag { display: block; align-self: flex-start; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-500); }
+  .tree-center > .tree-band-tag { margin-bottom: 0.5rem; }
+  .tree-stage { width: calc(60% + var(--tree-w) * 0.4%) !important; max-width: 100%; padding: 0.8rem 0.95rem; }
+  .tree-stage[data-dim] { opacity: 1; }
+  .tree-stage[data-dim] > :not(.tree-stage-side) { opacity: 0.25; }
+  .tree-stage-side { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: 0.7rem; padding-top: 0.6rem; border-top: 1px solid var(--gray-200); }
+  .tree-stage-side[data-pair] { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 0.9rem; }
+  .tree-stage-side[data-pair] .tree-side-line + .tree-side-line { margin-top: 0; padding-top: 0; border-top: 0; padding-left: 0.9rem; border-left: 1px solid var(--gray-200); }
+  .tree-stage-side .tree-value { font-size: 1.05rem; }
+  .tree-stage-side .tree-meta { flex-wrap: wrap; row-gap: 0; white-space: normal; }
+  .tree-stage-side .tree-goal { grid-column: 1 / -1; }
+  .tree-link { height: 3.25rem; }
+  .tree-link[data-band] { height: 4.75rem; padding-top: 1.4rem; }
+  .tree-link > .tree-band-tag { position: absolute; top: 0.35rem; left: 0; }
+  .tree-chip { gap: 0.35rem; padding: 0.22rem 0.6rem; font-size: 0.75rem; }
+  .tree-legend-item { min-height: 2.5rem; padding: 0 0.75rem; }
+  .tree-bridge-row { grid-template-columns: minmax(0, 1fr) 3.75rem 5.75rem; row-gap: 0.35rem; column-gap: 0.5rem; }
+  .tree-bridge-row > .tree-bridge-track { grid-column: 1 / -1; grid-row: 2; }
+}
+
+/* Every control in the top bar shares one height and shape: filters,
+   status select, lag flag and period picker. Last in the file so it wins over .btn-chip and .lag-badge. */
+.topbar-control {
+  display: inline-flex;
+  align-items: center;
+  height: 2.125rem;
+  padding: 0 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+/* Desktop is unchanged: everything below sits behind
+   max-width queries or coarse pointers. */
+.sheet-backdrop { background: rgba(10, 10, 10, 0.32); }
+.sheet-panel { box-shadow: 0 -12px 32px rgba(10, 10, 10, 0.12); animation: sheet-up 180ms ease-out; padding-bottom: env(safe-area-inset-bottom); }
+@keyframes sheet-up { from { transform: translateY(16px); opacity: 0.6; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .sheet-panel { animation: none; } }
+
+@media (max-width: 1023.98px) {
+  :root { --page-gap: 1rem; }
+  /* iOS zooms into inputs under 16px. */
+  input, select { font-size: 16px; }
+}
+
+@media (max-width: 639.98px) {
+  :root { --kpi-size: 1.3rem; }
+  /* Phones: compact cells, and a capped first column that wraps (instead of the desktop
+     no-wrap rule) so long names stay readable without filling the window. */
+  table.data { font-size: 0.82rem; }
+  table.data th, table.data td { padding: 0.5rem 0.45rem; }
+  table.data th:first-child, table.data td:first-child { max-width: 9rem; white-space: normal; overflow-wrap: anywhere; padding-left: 0.25rem; }
+  /* Cards on a phone already have their own padding: let tables run to the card edge. */
+  .card .table-scroll { margin-left: -0.875rem; margin-right: -0.875rem; padding-left: 0.875rem; padding-right: 0.875rem; }
+}
+
+/* Touch: controls at least 40px high. */
+@media (pointer: coarse) {
+  .btn-chip, .topbar-control, .segmented { min-height: 2.5rem; }
+  .segmented > button { min-width: 2.5rem; }
+}
+
+/* Subtle motion. One curve for everything that settles; all of it is off under reduced motion. */
+:root { --ease-settle: cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* KPI digits roll to a new value; the ones column first, each column left of it 35ms later. */
+.roll { display: inline-flex; align-items: flex-start; line-height: 1.25; white-space: pre; }
+.roll-char, .roll-col, .roll-strip > span { display: block; height: 1.25em; }
+.roll-col { overflow: hidden; }
+.roll-strip { display: flex; flex-direction: column; transition: transform 650ms var(--ease-settle); }
+
+/* Goal meters sweep to their fill. */
+.gauge-fill { transition: stroke-dashoffset 900ms var(--ease-settle), stroke 300ms ease; }
+
+/* Page content rises in once on arrival; the Overview sections follow each other. The
+   animation only runs backwards-filled, so nothing keeps a transform after it ends. */
+@keyframes reveal-rise { from { opacity: 0; transform: translateY(6px); } }
+@keyframes reveal-fade { from { opacity: 0; } }
+.page-reveal > * { animation: reveal-rise 420ms var(--ease-settle) backwards; }
+.reveal-stagger > * { animation: reveal-fade 480ms var(--ease-settle) backwards; }
+.reveal-stagger > :nth-child(2) { animation-delay: 70ms; }
+.reveal-stagger > :nth-child(3) { animation-delay: 140ms; }
+.reveal-stagger > :nth-child(n + 4) { animation-delay: 210ms; }
+
+/* Loading: bars breathe in colour and wait 150ms before they show. */
+@keyframes skeleton-in { from { opacity: 0; } }
+@keyframes skeleton-breathe { 50% { background-color: var(--gray-200); } }
+@keyframes skeleton-breathe-border { 50% { border-color: var(--gray-200); } }
+.skeleton { animation: skeleton-in 240ms ease-out 150ms backwards; }
+.skeleton-bar { border-radius: 4px; background-color: var(--paper-alt); animation: skeleton-breathe 1.6s ease-in-out infinite; }
+.skeleton-arc { width: 198px; height: 99px; border: 14px solid var(--paper-alt); border-bottom: 0; border-radius: 99px 99px 0 0; animation: skeleton-breathe-border 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .roll-strip, .gauge-fill { transition: none; }
+  .page-reveal > *, .reveal-stagger > *, .skeleton, .skeleton-bar, .skeleton-arc { animation: none; }
+}

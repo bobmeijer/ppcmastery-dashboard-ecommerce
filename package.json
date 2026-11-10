@@ -1,0 +1,55 @@
+{
+  "name": "ppc-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "backfill": "node scripts/backfill.mjs",
+    "users:add": "node scripts/add-user.mjs",
+    "accounts:add": "node scripts/add-account.mjs",
+    "communications:import": "node scripts/import-communications.mjs",
+    "doctor": "node scripts/doctor.mjs",
+    "google:auth": "node scripts/google-auth.mjs",
+    "msads:auth": "node scripts/microsoft-auth.mjs",
+    "scan:leaks": "node scripts/leak-scan.mjs",
+    "demo:replay": "vitest run --config vitest.replay.config.ts --disableConsoleIntercept"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.1.0",
+    "@supabase/supabase-js": "^2.49.4",
+    "bcryptjs": "^2.4.3",
+    "date-fns": "^4.1.0",
+    "google-ads-api": "^24.1.0",
+    "next": "15.5.28",
+    "next-auth": "^4.24.11",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "recharts": "^2.15.2",
+    "resend": "^6.34.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.17.30",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "15.5.28",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.12"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "^8.5.30"
+    },
+    "postcss-selector-parser": "^7.1.6",
+    "uuid": "^11.1.1"
+  }
+}
